@@ -1,9 +1,13 @@
 package com.twuc.wf.twspring.core;
 
+import com.twuc.wf.twspring.core.schedule.Schedule;
+import com.twuc.wf.twspring.exceptions.MultipleInjectConstructorException;
+import com.twuc.wf.twspring.exceptions.NoSuchBeanDefinitionException;
 import com.twuc.wf.twspring.simplehttpserver.IServer;
 import com.twuc.wf.twspring.simplehttpserver.SimpleHttpServer;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static com.twuc.wf.twspring.constant.CONSTANT.VERSION;
 
@@ -13,6 +17,7 @@ public class SpringApplication {
     private int HTTP_LISTEN_PORT = 8080;
 
     private AnnotationApplicationContext context;
+    private Schedule schedule;
 
     public SpringApplication() {
     }
@@ -20,7 +25,14 @@ public class SpringApplication {
     public void run(Class<?> contextClz){
         printCoolStartArt();
 
-        context = new AnnotationApplicationContext(contextClz);
+        try {
+            context = new AnnotationApplicationContext(contextClz);
+            schedule = new Schedule();
+        } catch (IllegalAccessException | MultipleInjectConstructorException | InstantiationException | NoSuchBeanDefinitionException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        startScheduleTasks();
 
         try {
             startHttpListener();
@@ -28,6 +40,12 @@ public class SpringApplication {
             e.printStackTrace();
         }
 
+        startScheduleTasks();
+
+    }
+
+    private void startScheduleTasks() {
+        schedule.start();
     }
 
     private void printCoolStartArt() {

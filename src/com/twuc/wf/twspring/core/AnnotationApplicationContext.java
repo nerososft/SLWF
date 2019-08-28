@@ -1,6 +1,9 @@
 package com.twuc.wf.twspring.core;
 
 import com.twuc.wf.twspring.annotations.*;
+import com.twuc.wf.twspring.core.schedule.task.ScheduleIntervalTask;
+import com.twuc.wf.twspring.core.schedule.task.ScheduleTask;
+import com.twuc.wf.twspring.core.schedule.task.ScheduleTimeoutTask;
 import com.twuc.wf.twspring.entity.ClassMethodPair;
 import com.twuc.wf.twspring.exceptions.MultipleInjectConstructorException;
 import com.twuc.wf.twspring.exceptions.NoSuchBeanDefinitionException;
@@ -10,9 +13,7 @@ import com.twuc.wf.twspring.utils.ClassUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.twuc.wf.twspring.constant.CONSTANT.pInfo;
 
@@ -24,12 +25,14 @@ public class AnnotationApplicationContext {
     public static Map<String, ClassMethodPair>  postMappingMap = new HashMap<>();
     public static Map<Class<?>, Class<?>>  exceptionHandlerMap = new HashMap<>();
 
-    AnnotationApplicationContext(Class<?> context) {
+    public static Set<ScheduleTask> scheduleTaskSet = new HashSet<>();
+
+    AnnotationApplicationContext(Class<?> context) throws IllegalAccessException, MultipleInjectConstructorException, NoSuchBeanDefinitionException, InstantiationException, InvocationTargetException {
         this.context = context;
         this.scanAnnotations();
     }
 
-    private void scanAnnotations() {
+    private void scanAnnotations() throws InvocationTargetException, NoSuchBeanDefinitionException, MultipleInjectConstructorException, InstantiationException, IllegalAccessException {
 
 
         List<Class<?>> classes = ClassUtil.getAllClassByPackageName(this.context.getPackage());
@@ -40,6 +43,17 @@ public class AnnotationApplicationContext {
             Component component = c.getDeclaredAnnotation(Component.class);
             if(null != component) {
                 BeanFactory.beansSet.add(c);
+                Method[] methods = c.getMethods();
+                for(Method m:methods){
+                    Scheduled scheduled = m.getDeclaredAnnotation(Scheduled.class);
+                    if(null != scheduled){
+                        if(scheduled.fixedRate()!=0) {
+                            scheduleTaskSet.add(new ScheduleIntervalTask(BeanFactory.getBean(c), c, m, null, (long) scheduled.fixedRate()));
+                        }else if(scheduled.fixedRate()==0){
+                            scheduleTaskSet.add(new ScheduleTimeoutTask(BeanFactory.getBean(c), c, m, null, (long) scheduled.initialDelay()));
+                        }
+                    }
+                }
             }
 
             // scan @RestController
