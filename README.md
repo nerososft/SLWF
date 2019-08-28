@@ -17,6 +17,8 @@ Simple SpringBoot Like Web Framework
 
 `@ResponseStatus`
 
+`@ControllerAdvice`
+
 `@ExceptionHandler`
 
 `@Configuration`
