@@ -27,4 +27,4 @@ Simple SpringBoot Like Web Framework
 
 `@Scheduled`
 
-本来是在放在gitlab上的[地址](https://gitlab.com/twu_xingfeng/myspring) ,想了想还是拿到了github上，非常适合拿来学习Spring, 想要个star
+本来是在放在gitlab上的[地址](https://gitlab.com/twu_xingfeng/myspring) ,想了想还是拿到了github上，非常适合拿来学习Spring
