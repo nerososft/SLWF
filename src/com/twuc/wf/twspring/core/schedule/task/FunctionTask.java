@@ -10,8 +10,8 @@ public class FunctionTask extends Task implements Runnable {
     private Method method;
     private Object[] args;
 
-    public FunctionTask(TaskType taskType, TaskStatus taskStatus, Object object, Class<?> clz, Method method, Object[] args) {
-        super(taskType, taskStatus);
+    public FunctionTask(TaskType taskType, Object object, Class<?> clz, Method method, Object[] args) {
+        super(taskType);
         this.object = object;
         this.clz = clz;
         this.method = method;

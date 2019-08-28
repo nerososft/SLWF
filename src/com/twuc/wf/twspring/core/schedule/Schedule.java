@@ -14,18 +14,18 @@ import static com.twuc.wf.twspring.constant.CONSTANT.pInfo;
 
 public class Schedule {
 
-    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors()*2);
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     public void start() {
         for (ScheduleTask task : AnnotationApplicationContext.scheduleTaskSet) {
-            if(task.getTaskType()== TaskType.TASK_TYPE_SCHEDULE_INTERVAL) {
+            if (task.getTaskType() == TaskType.TASK_TYPE_SCHEDULE_INTERVAL) {
                 Scheduled scheduled = task.getMethod().getDeclaredAnnotation(Scheduled.class);
-                pInfo("[ " + Thread.currentThread().getName() + " ] schedule task:'" + task.getClz().getName() + "." + task.getMethod().getName() + "' interval:'" + scheduled.fixedRate() + "' initializeDelay:'" + scheduled.initialDelay() + "'");
+                pInfo("[ " + Thread.currentThread().getName() + " ] Schedule Task(" + task.getTaskType() + "): '" + task.getClz().getName() + "." + task.getMethod().getName() + "' interval:'" + scheduled.fixedRate() + "' initializeDelay:'" + scheduled.initialDelay() + "'");
                 scheduledExecutorService.scheduleAtFixedRate(task, scheduled.initialDelay(), scheduled.fixedRate(), TimeUnit.MILLISECONDS);
-            }else if(task.getTaskType()==TaskType.TASK_TYPE_SCHEDULE_TIMEOUT){
+            } else if (task.getTaskType() == TaskType.TASK_TYPE_SCHEDULE_TIMEOUT) {
                 Scheduled scheduled = task.getMethod().getDeclaredAnnotation(Scheduled.class);
-                pInfo("[ " + Thread.currentThread().getName() + " ] schedule task:'" + task.getClz().getName() + "." + task.getMethod().getName() + "' interval:'" + scheduled.fixedRate() + "' initializeDelay:'" + scheduled.initialDelay() + "'");
-                scheduledExecutorService.schedule(task, scheduled.initialDelay(),TimeUnit.MILLISECONDS);
+                pInfo("[ " + Thread.currentThread().getName() + " ] Schedule Task(" + task.getTaskType() + "): '" + task.getClz().getName() + "." + task.getMethod().getName() + "' interval:'" + scheduled.fixedRate() + "' initializeDelay:'" + scheduled.initialDelay() + "'");
+                scheduledExecutorService.schedule(task, scheduled.initialDelay(), TimeUnit.MILLISECONDS);
             }
         }
     }
