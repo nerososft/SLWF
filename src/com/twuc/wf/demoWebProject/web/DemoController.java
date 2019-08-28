@@ -1,5 +1,6 @@
 package com.twuc.wf.demoWebProject.web;
 
+import com.twuc.wf.demoWebProject.entity.User;
 import com.twuc.wf.demoWebProject.service.DemoService;
 import com.twuc.wf.twspring.annotations.*;
 import com.twuc.wf.twspring.simplehttpserver.contract.HttpStatus;
@@ -28,5 +29,11 @@ public class DemoController {
                 isDemoServiceNull,isDemoRepoNull,isDemoRepoUserNull,
                 demoService.getDemoRepo().getUser().getName(),
                 demoService.getDemoRepo().getUser().getAge());
+    }
+
+    @RequestMapping(value="/user", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public User getUserByName(@RequestParam("name") String name){
+        return demoService.getUserByFeign(name);
     }
 }

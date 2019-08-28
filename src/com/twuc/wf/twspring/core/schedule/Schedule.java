@@ -2,7 +2,6 @@ package com.twuc.wf.twspring.core.schedule;
 
 import com.twuc.wf.twspring.annotations.Scheduled;
 import com.twuc.wf.twspring.core.AnnotationApplicationContext;
-import com.twuc.wf.twspring.core.schedule.task.ScheduleIntervalTask;
 import com.twuc.wf.twspring.core.schedule.task.ScheduleTask;
 import com.twuc.wf.twspring.core.schedule.task.TaskType;
 

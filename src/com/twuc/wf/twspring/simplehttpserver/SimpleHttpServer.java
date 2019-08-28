@@ -28,7 +28,7 @@ public class SimpleHttpServer implements IServer {
 
     @Override
     public void start() throws IOException {
-        pInfo("[ "+Thread.currentThread().getName()+" ] " + String.format(HTTP_SERVER_LISTEN_ON_PORT,8080));
+        pInfo("[ "+Thread.currentThread().getName()+" ] " + String.format(HTTP_SERVER_LISTEN_ON_PORT,this.port));
         while(!Thread.interrupted()){
             Socket socket = this.serverSocket.accept();
             executorService.execute(new SimpleHttpHandler(socket,context));

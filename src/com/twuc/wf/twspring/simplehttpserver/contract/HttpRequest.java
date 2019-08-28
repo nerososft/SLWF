@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class HttpRequest {
     private String startLine;
-    private Map<String,String> header;
+    private Map<String, String> header;
     private String content;
 
     public HttpRequest() {
@@ -53,11 +53,11 @@ public class HttpRequest {
     }
 
     public void addHeader(String key, String value) {
-        this.header.put(key,value);
+        this.header.put(key, value);
     }
 
     public RequestMethod getHttpMethod() {
-        switch (this.startLine.split(" ")[0]){
+        switch (this.startLine.split(" ")[0]) {
             case "PUT":
                 return RequestMethod.PUT;
             case "POST":
@@ -74,13 +74,17 @@ public class HttpRequest {
     }
 
     public Map<String, String> getQueryParams() {
-        String queryString  = this.startLine.split(" ")[1].split("\\?")[1];
-        String[] queryPair = queryString.split("&");
-        Map<String,String> queryParamsMap = new HashMap<>();
-        for(String pair:queryPair){
-            queryParamsMap.put(pair.split("=")[0],pair.split("=")[1]);
+        try {
+            String queryString = this.startLine.split(" ")[1].split("\\?")[1];
+            String[] queryPair = queryString.split("&");
+            Map<String, String> queryParamsMap = new HashMap<>();
+            for (String pair : queryPair) {
+                queryParamsMap.put(pair.split("=")[0], pair.split("=")[1]);
+            }
+            return queryParamsMap;
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+            return new HashMap<>();
         }
-        return queryParamsMap;
     }
 
     public String getProtocol() {

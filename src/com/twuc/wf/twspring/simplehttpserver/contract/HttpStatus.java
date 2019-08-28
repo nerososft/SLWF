@@ -113,7 +113,7 @@ public enum HttpStatus {
     /**
      * {@code 305 Use Proxy}.
      * @see <a href="http://tools.ietf.org/html/rfc7231#section-6.4.5">HTTP/1.1: Semantics and Content, section 6.4.5</a>
-     * @deprecated due to security concerns regarding in-band configuration of a proxy
+     * @deprecated due to security concerns regarding in-band configuration of a HttpRpcProxy
      */
     @Deprecated
     USE_PROXY(305, "Use Proxy"),

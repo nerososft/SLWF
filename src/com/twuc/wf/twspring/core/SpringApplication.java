@@ -14,7 +14,7 @@ import static com.twuc.wf.twspring.constant.CONSTANT.VERSION;
 
 public class SpringApplication {
 
-    private int HTTP_LISTEN_PORT = 8080;
+    private int HTTP_LISTEN_PORT = 21314;
 
     private AnnotationApplicationContext context;
     private Schedule schedule;
@@ -40,7 +40,6 @@ public class SpringApplication {
             e.printStackTrace();
         }
 
-        startScheduleTasks();
 
     }
 
